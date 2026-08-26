@@ -1,4 +1,5 @@
 import sys,struct,os
+import tttCript
 
 def u32(file):
     return struct.unpack("<I", file.read(4))[0]
@@ -44,7 +45,21 @@ for indx,x in enumerate(lookups):
     if(x.size):
         fbin.seek(x.offset)
         fil = open(outDir + str("%04i_%04x" % (indx,x.unk2)) + ".bin",'wb')
-        fil.write(fbin.read(x.size))
+        dataOG = fbin.read(x.size)
+        if(x.size > 0x800):
+            header = dataOG[:0x800]
+        else:
+            header = dataOG
+        if(x.unk2 != 0xFFFF):
+            decrypted = tttCript.DecryptBlock(header,x.unk2)
+            data = bytearray()
+            data.extend(decrypted)
+            if(x.size > 0x800):
+                data.extend(dataOG[0x800:])
+        else:
+            data = dataOG
+        
+        fil.write(data)
     
 
 #print(hex(total))

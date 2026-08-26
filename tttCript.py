@@ -21,11 +21,11 @@ def DecryptBlock(inputByte,seed):
     if(len(inputByte)<loopCount):
         loopCount = len(inputByte)
     outputBytes = bytearray()
-    for x in len(loopCount >> 2):
+    for x in range(loopCount >> 2):
         inputValue = u32(inputByte,x*4)
-        outputBytes.extend(w32(inputValue ^ xorBlock))
+        outputBytes.extend(w32((inputValue ^ xorBlock)&0xFFFFFFFF))
         xorBlock = SeedRNG(xorBlock)
-    
+    return outputBytes
 
 
     
