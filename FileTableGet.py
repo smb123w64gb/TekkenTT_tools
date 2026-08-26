@@ -25,8 +25,8 @@ class LUT(object):
         self.size = (u32(f)-0x350a)
         self.flags = u16(f)
         self.id = u16(f)
-        self.unk2 = s16(f)
-        self.unk3 = s16(f)
+        self.unk2 = u16(f)
+        self.unk3 = u16(f)
 f = open(sys.argv[1],'rb')
 f.seek(TABLESTART)
 lookups = []
@@ -43,7 +43,7 @@ os.makedirs(outDir, exist_ok=True)
 for indx,x in enumerate(lookups):
     if(x.size):
         fbin.seek(x.offset)
-        fil = open(outDir + str("%04i" % indx) + ".bin",'wb')
+        fil = open(outDir + str("%04i_%04x" % (indx,x.unk2)) + ".bin",'wb')
         fil.write(fbin.read(x.size))
     
 
